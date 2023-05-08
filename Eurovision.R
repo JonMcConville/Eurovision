@@ -41,3 +41,16 @@ Winner <-votes%>%
 Test_Winner<- contestants%>%
   filter(place_contest ==1)%>%
   select(year, to_country_id)
+
+
+
+Winner <-votes%>%
+  filter(round == "final")%>%
+  select(year,to_country,total_points)%>%
+  group_by(year, to_country)%>%
+  summarise("Total_Points" = sum(total_points, rm.na = FALSE))%>%
+  summarise("Winning_Score" = max("Total_Points", rm.na = FALSE)) %>%
+  ungroup()%>%
+  select(year,Winning_Score)%>%
+  distinct(year, .keep_all= TRUE)%>%
+  arrange(year)
