@@ -1,0 +1,74 @@
+---
+title: "Eurovision Song Contest"
+author: "Jonathan McConville"
+date: "2023-05-08"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+## Loading Libraries ----
+
+library(dplyr)
+library(tidyverse)
+library(stringdist)
+library(stringr)
+library(reshape2)
+library(tidyr)
+library(wesanderson)
+library(pivottabler)
+
+## Reading in Data ----
+
+contestants <- read.csv("contestants.csv")
+votes <-read.csv("votes.csv")
+```
+
+## Eurovision Song Contest
+
+# Question 1
+
+Using the votes dataset, work out the countries with the the highest score for each year
+
+```{r}
+Winner <-votes%>%
+  filter(round == "final")%>%
+  select(year,to_country,total_points)%>%
+  group_by(year, to_country)%>%
+  summarise("Total_Points" = sum(total_points, rm.na = FALSE))%>%
+  arrange(desc(Total_Points))%>%
+  slice_max(Total_Points)%>%
+  arrange(year)
+
+```
+
+a) Which years saw multiple countries score the highest?
+
+b) The result for 1991 saw 2 countries tie for highest points however only one was delcared the winner due to the 'count back'* rule that was introduced for tie breaks. Which country was declared the winner?
+
+*The count back rule meant in the event of a tie for first place, the country that received the most 12-point scores would be the winner. If still tied, the 10-point scores would be taken into account and so on all the way down to the 1-point scores.
+
+```{r}
+votes%>%
+  select(year, to_country, total_points)%>%
+  filter(year==1991)%>%
+  filter(to_country == "fr" | to_country == "se")%>%
+  group_by(year, to_country, total_points)%>%
+  summarise(count=n())%>%
+  arrange(desc(total_points))
+
+#Both France and Sweden received the same number of 12 point scores however Sweden received 3 more 10 point scores (5 vs. 2) and would have been declared winners.
+```
+
+
+#Question 2
+
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
