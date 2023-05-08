@@ -100,26 +100,20 @@ ggplot(votes %>%
 # Question 2a----
 
 VotingPattern <-votes%>%
-<<<<<<< HEAD
   filter(round == "final")%>%
 #  filter(year >= 2010)%>%
-=======
->>>>>>> 3a0582a4971558f5309a193d22512ffcc79d976f
+
   filter(from_country_id != to_country_id)%>%
   select(from_country_id,to_country_id, total_points)%>%
   group_by(from_country_id, to_country_id)%>%
   summarise("Points"=sum(total_points))%>%
-<<<<<<< HEAD
+
 #  arrange(desc(Points))
-=======
->>>>>>> 3a0582a4971558f5309a193d22512ffcc79d976f
+
   arrange(from_country_id, to_country_id)
 
 VotingPattern %>%
 pivot_wider(names_from = to_country_id, values_from = Points)
-
-
-<<<<<<< HEAD
 
 
 ggplot(contestants %>% 
@@ -137,7 +131,3 @@ Number_of_Countries<- votes%>%
   group_by(year)%>%
   distinct(to_country_id)%>%
   summarise(count=n())
-
-=======
-  
->>>>>>> 3a0582a4971558f5309a193d22512ffcc79d976f
